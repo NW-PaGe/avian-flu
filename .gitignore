@@ -1,45 +1,29 @@
-# Files created by the pipeline, which we want to keep out of git
-# (or at least out of _this_ git repo).
-data/
-builds/
+# Files to keep out of this repo
+
+# Snakemake state dir
+.snakemake/
+/.snakemake
+
+# R files
+.Rproj*
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# images
+*.png
+.Rproj.user
+
+# folders
 results/
-tables/
-auspice/
-auspice-who/
-auspice_renamed/
-build/
-logs/
-figures/
-targets/
-benchmarks/
-Rscripts/
-raw_files_for_R/
-new_data/
 auspice_archive/
+files_for_auspice/
+raw_files_for_R/
+auspice/
 
 # Sensitive environment variables
 environment*
-
-# Snakemake state dir
-/.snakemake
-
-# Local config overrides
-/config_local.yaml
-
-# For Python #
-##############
-*.pyc
-.tox/
-.cache/
-
-# Compiled source #
-###################
-*.com
-*.class
-*.dll
-*.exe
-*.o
-*.so
 
 # OS generated files #
 ######################
@@ -53,21 +37,8 @@ ehthumbs.db
 Thumbs.db
 *~
 
-# nohup output
-nohup.out
-
-# cluster logs
-slurm-*
-
-# Jupyter/Altair droppings
-.ipynb_checkpoints
-geckodriver.log
-
-# R files
-.Rproj*
-.Rhistory
-.RData
-
-# images
-*.png
-.Rproj.user
+# For Python #
+##############
+*.pyc
+.tox/
+.cache/

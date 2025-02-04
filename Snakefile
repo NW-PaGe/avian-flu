@@ -15,16 +15,35 @@ SEGMENTS = ["ha"]
 generated JSON files in the auspice folder for each subtype and segment."""
 rule all:
     input:
+        processed_metadata = "new_data/metadata.tsv",
         auspice_json = expand("auspice/flu_avian_{subtype}_{segment}.json", subtype=SUBTYPES, segment=SEGMENTS)
+
+# Add this new rule for processing metadata
+rule process_metadata:
+    message:
+        """
+        Processing metadata from XLSX to TSV
+        """
+    input:
+        raw_metadata = "new_data/metadata.xlsx"
+    output:
+        cleaned_metadata = "new_data/metadata.tsv"
+    shell:
+        """
+        python scripts/process_metadata.py \
+            --input {input.raw_metadata} \
+            --output {output.cleaned_metadata}
+        """
 
 """Specify all input files here. For this build, you'll start with input sequences
 from the example_data folder, which contain metadata information in the
 sequence header. Specify here files denoting specific strains to include or drop,
 references sequences, and files for auspice visualization"""
+# Ensure all downstream rules reference the output of `process_metadata`
 rule files:
     params:
-        input_sequences = "new_data/gisaid_epiflu_sequence_cleaned_2024.11.12.fasta",
-        input_metadata = "new_data/gisaid_epiflu_metadata_cleaned_2024.11.12.tsv",
+        input_sequences = "new_data/raw_sequences_ha.fasta",
+        input_metadata = rules.process_metadata.output.cleaned_metadata,  # Update this line
         reference = "config/reference_h5n1_ha.gb",
         colors = "config/colors_h5n1_wa.tsv",
         auspice_config = "config/auspice_config_h5n1.json"
@@ -91,7 +110,8 @@ rule include_washington:
         """
     input:
         sequences = files.input_sequences,
-        metadata = files.input_metadata
+        metadata = files.input_metadata,
+        exclude_isolates = "config/exclude_isolates.txt" # File containing isolate names to always exclude
     output:
         strains = "results/include/washington-strains_{subtype}_{segment}.txt"
     params:
@@ -108,6 +128,7 @@ rule include_washington:
          --group-by {params.group_by} \
          --sequences-per-group {params.sequences_per_group}  \
          --query {params.query:q} \
+         --exclude {input.exclude_isolates} \
          --output-strains {output.strains}
          """
 
@@ -118,7 +139,8 @@ rule include_regional:
         """
     input:
         sequences = files.input_sequences,
-        metadata = files.input_metadata
+        metadata = files.input_metadata,
+        exclude_isolates = "config/exclude_isolates.txt" # File containing isolate names to always exclude
     output:
         strains = "results/include/regional-strains_{subtype}_{segment}.txt"
     params:
@@ -126,7 +148,7 @@ rule include_regional:
         sequences_per_group = 400,
         min_date = min_date,
         min_length = min_length,
-        query = "division == ['Idaho','Oregon','British Columbia']"
+        query = "division == ['Idaho','Oregon','British Columbia','Alaska']"
     shell:
         """
         augur filter \
@@ -135,6 +157,7 @@ rule include_regional:
          --group-by {params.group_by} \
          --sequences-per-group {params.sequences_per_group}  \
          --query {params.query:q} \
+         --exclude {input.exclude_isolates} \
          --output-strains {output.strains}
          """
 
@@ -145,12 +168,14 @@ rule include_northamerica:
         """
     input:
         sequences = files.input_sequences,
-        metadata = files.input_metadata
+        metadata = files.input_metadata,
+        specific_isolates = "config/include_isolates.txt",  # File containing isolate names to always include
+        exclude_isolates = "config/exclude_isolates.txt"
     output:
         strains = "results/include/north-am-strains_{subtype}_{segment}.txt"
     params:
         group_by = ['month','year'],
-        sequences_per_group = 400,
+        sequences_per_group = 100,
         min_date = min_date,
         min_length = min_length,
         query = "(region == 'North America') & (division != 'Washington')"
@@ -162,6 +187,8 @@ rule include_northamerica:
          --group-by {params.group_by} \
          --sequences-per-group {params.sequences_per_group}  \
          --query {params.query:q} \
+         --include {input.specific_isolates} \
+         --exclude {input.exclude_isolates} \
          --output-strains {output.strains}
          """
 
@@ -192,15 +219,48 @@ rule include_world:
          --output-strains {output.strains}
          """
 
+rule include_asia:
+    message:
+        """
+        Subsampling for Asia sequences to include
+        """
+    input:
+        sequences = files.input_sequences,
+        metadata = files.input_metadata
+    output:
+        strains = "results/include/asia-strains_{subtype}_{segment}.txt"
+    params:
+        group_by = ['month','year'],
+        sequences_per_group = 400,
+        min_date = min_date,
+        min_length = min_length,
+        query = "(region == 'Asia' )"
+    shell:
+        """
+        augur filter \
+         --metadata {input.metadata} \
+         --sequences {input.sequences} \
+         --group-by {params.group_by} \
+         --sequences-per-group {params.sequences_per_group}  \
+         --query {params.query:q} \
+         --output-strains {output.strains}
+         """
+
 rule include:
     message:
         """
-        Including 4 files to include in pipeline
+        Combining all included strains for the pipeline
         """
     input:
         sequences = files.input_sequences,
         metadata = files.input_metadata,
-        include = [rules.include_washington.output.strains, rules.include_regional.output.strains, rules.include_northamerica.output.strains, rules.include_world.output.strains]
+        include = [
+            rules.include_washington.output.strains,
+            rules.include_regional.output.strains,
+            rules.include_northamerica.output.strains,
+            rules.include_world.output.strains,
+            rules.include_asia.output.strains
+        ]
     output:
         sequences = "results/include/included_strains_{subtype}_{segment}.fasta"
     shell:
@@ -270,7 +330,7 @@ rule refine:
     params:
         coalescent = "skyline",
         date_inference = "marginal",
-        clock_filter_iqd = 20
+        clock_filter_iqd = 10
     shell:
         """
         augur refine \
@@ -282,6 +342,7 @@ rule refine:
             --timetree \
             --coalescent {params.coalescent} \
             --date-confidence \
+            --stochastic-resolve \
             --date-inference {params.date_inference} \
             --clock-filter-iqd {params.clock_filter_iqd}
         """
@@ -290,7 +351,8 @@ rule ancestral:
     message: "Reconstructing ancestral sequences and mutations"
     input:
         tree = rules.refine.output.tree,
-        alignment = rules.align.output
+        alignment = rules.align.output,
+        reference = files.reference
     output:
         node_data = "results/nt-muts_{subtype}_{segment}.json"
     params:
@@ -302,7 +364,8 @@ rule ancestral:
             --alignment {input.alignment} \
             --output-node-data {output.node_data} \
             --inference {params.inference}\
-            --keep-ambiguous
+            --infer-ambiguous \
+            --root-sequence {input.reference}
         """
 
 rule translate:
@@ -379,7 +442,7 @@ rule export:
             --metadata {input.metadata} \
             --node-data {input.node_data}\
             --auspice-config {input.auspice_config} \
-            --include-root-sequence \
+            --include-root-sequence-inline \
             --output {output.auspice_json}
         """
 
