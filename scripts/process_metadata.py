@@ -1,3 +1,14 @@
+import sys
+import subprocess
+
+# Ensure openpyxl is installed
+try:
+    import openpyxl
+except ImportError:
+    print("Missing dependency: 'openpyxl'. Installing now...")
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "openpyxl"])
+    import openpyxl  # Try importing again after installation
+
 import argparse
 import pandas as pd
 import os
@@ -14,7 +25,7 @@ def main():
         raise FileNotFoundError(f"Input file not found: {args.input}")
 
     # Read the metadata file
-    metadata = pd.read_excel(args.input)
+    metadata = pd.read_excel(args.input, engine="openpyxl")  # Explicitly specify openpyxl engine
 
     # Filter out rows with "egg" or "cell" in passage_category
     metadata = metadata[~metadata['passage_category'].str.contains('egg|cell', case=False, na=False)]
