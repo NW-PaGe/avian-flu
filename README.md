@@ -1,10 +1,23 @@
-# 1. Build Overview
+## Table of Contents
+- [Build Overview](#build-overview)
+- [Data Sources & Inputs](#data-sources--inputs)
+- [Setup & Dependencies](#setup--dependencies)
+  - [Installation](#installation)
+  - [Clone the repository](#clone-the-repository)
+- [Run the Build with Test Data](#run-the-build-with-test-data)
+- [High-level Build Features & Capabilities](#high-level-build-features--capabilities)
+- [Scientific Decisions](#scientific-decisions)
+- [Adapting for Another State](#adapting-for-another-state)
+- [Expected Outputs and Interpretation](#expected-outputs-and-interpretation)
+
+
+# Build Overview
 - Build Name: H5N1 Washington focused build for HA segment
 - Pathogen/Strain: Influenza A H5N1
 - Scope: HA segment, Washington focused
 - Purpose: This repository contains the Nextstrain build for Washington State genomic surveillance of h5n1 HA segment.
 
-# 2. Data Sources & Inputs
+# Data Sources & Inputs
 This build relies on publicly available data sourced from GISAID and GenBank. These data have been cleaned and stored on AWS.
 
 - Sequence Data: GISAID, GenBank (for select sequences)
@@ -13,7 +26,7 @@ This build relies on publicly available data sourced from GISAID and GenBank. Th
     - new_data/raw_sequences_ha.fasta (containing viral genome sequences)
     - new_data/metadata.xlsx (with relevant sample information)
 
-# 3. Setup & Dependencies
+# Setup & Dependencies
 ### Installation
 Ensure that you have [Nextstrain](https://docs.nextstrain.org/en/latest/install.html) installed.
 
@@ -38,7 +51,7 @@ nextstrain build .
 
 # 5. High-level Build Features & Capabilities
 - Washington focused subsampling strategy
-- Furin Cleavage site 
+- Furin Cleavage site
 
 # 6. Scientific Decisions
 - Subsampling strategy: Prioritizes WA, regional (British Columbia, Idaho, etc... ) while maintaining national/global context. Heavy emphasis on Asian subsampling.
