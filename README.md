@@ -10,21 +10,23 @@
 - [Scientific Decisions](#scientific-decisions)
 - [Adapting for Another State](#adapting-for-another-state)
 - [Expected Outputs and Interpretation](#expected-outputs-and-interpretation)
+- [Questions](#questions)
 - [Acknowledgements](#acknowledgements)
 
 
 ## Build Overview
-- Build Name: H5N1 Washington focused build for HA segment
-- Pathogen/Strain: Influenza A H5N1
-- Scope: HA segment, Washington focused
-- Purpose: This repository contains the Nextstrain build for Washington State genomic surveillance of h5n1 HA segment.
+- **Build Name**: H5N1 Washington focused build for HA segment
+- **Pathogen/Strain**: Influenza A H5N1
+- **Scope**: HA segment, Washington focused
+- **Purpose**: This repository contains the Nextstrain build for Washington State genomic surveillance of H5N1 HA segment.
+- **Nextstrain Build Location**: https://nextstrain.org/groups/wadoh/flu/avian/washington/h5n1/4y/ha
 
 ## Data Sources & Inputs
 This build relies on publicly available data sourced from GISAID and GenBank. These data have been cleaned and stored on AWS.
 
-- Sequence Data: GISAID, GenBank (for select sequences)
-- Metadata: Sample collection metadata from GISAID and GenBank
-- Expected Inputs:
+- **Sequence Data**: GISAID, GenBank (for select sequences)
+- **Metadata**: Sample collection metadata from GISAID and GenBank
+- **Expected Inputs**:
     - new_data/raw_sequences_ha.fasta (containing viral genome sequences)
     - new_data/metadata.xlsx (with relevant sample information)
 
@@ -56,16 +58,19 @@ nextstrain build .
 - Furin Cleavage site
 
 ## Scientific Decisions
-- Subsampling strategy: Prioritizes WA, regional (British Columbia, Idaho, etc... ) while maintaining national/global context. Heavy emphasis on Asian subsampling.
-- Root Selection:
-- Other adjustments:
+- **Subsampling strategy**: Prioritizes WA, regional (British Columbia, Idaho, etc... ) while maintaining national/global context. Heavy emphasis on Asia & North America subsampling. {more here]}
+- **Root Selection**: Guangdong Goose [more here]
+- **Other adjustments**:
 
 ## Adapting for Another State
-- Instructions on how to adapt this build for another state.
+- [Instructions on how to adapt this build for another state.]
 
 ## Expected Outputs and Interpretation
 
 - `auspice/` folder contains:
 - `results/` folder contains:
+
+## Questions
+For any questions please submit them to our [Discussions](https://github.com/NW-PaGe/avian-flu/discussions) page otherwise [Issues](https://github.com/NW-PaGe/avian-flu/issues) can be logged as a Git issue.
 
 ## Acknowledgements
