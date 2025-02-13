@@ -10,6 +10,7 @@
 - [Scientific Decisions](#scientific-decisions)
 - [Adapting for Another State](#adapting-for-another-state)
 - [Expected Outputs and Interpretation](#expected-outputs-and-interpretation)
+- [Repository File Structure Overview](#repository-file-structure-overview)
 - [Questions](#questions)
 - [Acknowledgements](#acknowledgements)
 
@@ -71,10 +72,16 @@ nextstrain build .
 - [Instructions on how to adapt this build for another state. What files need to be modified and in what ways]
 
 ## Expected Outputs and Interpretation
+After successfully running the build there will be two output folders containing the build results.
 
 - `auspice/` folder contains:
-
 - `results/` folder contains:
+
+## Repository File Structure Overview
+- `config/`: contains what
+- `new_data/`: contains What
+- `scripts/`:
+- `clade-labeling`:
 
 ## Questions
 For any questions please submit them to our [Discussions](https://github.com/NW-PaGe/avian-flu/discussions) page otherwise software issues and requests can be logged as a [Git Issue]((https://github.com/NW-PaGe/avian-flu/issues)).
