@@ -27,8 +27,8 @@ This build relies on publicly available data sourced from GISAID and GenBank. Th
 - **Sequence Data**: GISAID, GenBank (for select sequences)
 - **Metadata**: Sample collection metadata from GISAID and GenBank
 - **Expected Inputs**:
-    - new_data/raw_sequences_ha.fasta (containing viral genome sequences)
-    - new_data/metadata.xlsx (with relevant sample information)
+    - `new_data/raw_sequences_ha.fasta` (containing viral genome sequences)
+    - `new_data/metadata.xlsx` (with relevant sample information)
 
 ## Setup & Dependencies
 ### Installation
@@ -60,9 +60,10 @@ nextstrain build .
 ## Scientific Decisions
 - **Subsampling strategy**: Prioritizes WA, regional (British Columbia, Idaho, etc... ) while maintaining national/global context. Heavy emphasis on Asia & North America subsampling. {more here]}
 - **Root Selection**: A/Goose/Guangdong/1/96(H5N1)
+- **Furin Cleavage Site**:
 - **Other adjustments**:
-- `**config/includes.txt**`: These sequences are always included into our sampling strategy as they are relevant to our epidemiological investigations.
-- `**config/excludes.txt**`: These sequences are always excluded from our subsampling and filtering due to duplication and based on epidemiological linkage knowledge. 
+  - `config/includes.txt`: These sequences are always included into our sampling strategy as they are relevant to our epidemiological investigations.
+  - `config/excludes.txt`: These sequences are always excluded from our subsampling and filtering due to duplication and based on epidemiological linkage knowledge.
 
 
 ## Adapting for Another State
