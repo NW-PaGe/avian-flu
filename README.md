@@ -59,8 +59,11 @@ nextstrain build .
 
 ## Scientific Decisions
 - **Subsampling strategy**: Prioritizes WA, regional (British Columbia, Idaho, etc... ) while maintaining national/global context. Heavy emphasis on Asia & North America subsampling. {more here]}
-- **Root Selection**: Guangdong Goose [more here]
+- **Root Selection**: A/Goose/Guangdong/1/96(H5N1)
 - **Other adjustments**:
+- `**config/includes.txt**`: These sequences are always included into our sampling strategy as they are relevant to our epidemiological investigations.
+- `**config/excludes.txt**`: These sequences are always excluded from our subsampling and filtering due to duplication and based on epidemiological linkage knowledge. 
+
 
 ## Adapting for Another State
 - [Instructions on how to adapt this build for another state.]
