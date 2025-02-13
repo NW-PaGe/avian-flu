@@ -2,47 +2,53 @@
 - Build Name: H5N1 Washington focused build for HA segment
 - Pathogen/Strain: Influenza A H5N1
 - Scope: HA segment, Washington focused
-- Purpose: This build is meant to provide genomic surveillance of H5N1 sequenced cases, focusing specifically on Washington state.
+- Purpose: This repository contains the Nextstrain build for Washington State genomic surveillance of h5n1 HA segment.
 
-# 2. Data
+# 2. Data Sources & Inputs
 This build relies on publicly available data sourced from GISAID and GenBank. These data have been cleaned and stored on AWS.
 
 - Sequence Data: GISAID, GenBank (for select sequences)
-    - new_data/raw_sequences_ha.fasta
 - Metadata: Sample collection metadata from GISAID and GenBank
-    - new_data/metadata.xlsx
+- Expected Inputs:
+    - new_data/raw_sequences_ha.fasta (containing viral genome sequences)
+    - new_data/metadata.xlsx (with relevant sample information)
 
+# 3. Setup & Dependencies
+### Installation
+Ensure that you have [Nextstrain](https://docs.nextstrain.org/en/latest/install.html) installed.
 
-# 3. Workflow and Processing
-- Snakemake workflow: [Brief description of major rules]
-- Subsampling strategy: [Describe selection criteria]
-- Alignment & Phylogenetics:
-  - Alignment: MAFFT
-  - Tree Inference: IQ-Tree
-- Clade Assignments:
+To check that Nextstrain is installed:
+```
+nextstrain check-setup
+```
 
-# 4. Output Files and Interpretation
-File, Description, Format
+### Clone the repository:
 
-How to use these outputs
-- Auspice visualiation allows real-time exploration of viral evolution
-- Metadata table provides key epidemiological variables (e.g., collection dates, location)
+```
+git clone https://github.com/NW-PaGe/avian-flu.git
+cd avian-flu
+```
 
-# 5. Customization Options
-- coloring variables or changing build title/text in auspice_config.json
-- subsampling strategy
-- furin cleavage
+# 4. Run the Build with Test Data
+To test the pipeline with the provided example data:
 
-
-# 6. System Requirements & Dependencies
-- Nextstrain
-
-# 7. Running the Build
-### Basic Run Command
-To execute the build, navigate to the project directory and run:
 ```
 nextstrain build .
 ```
 
+# 5. High-level Build Features & Capabilities
+- Washington focused subsampling strategy
+- Furin Cleavage site 
 
-# Downloading H5N1 files from GISAID.org
+# 6. Scientific Decisions
+- Subsampling strategy: Prioritizes WA, regional (British Columbia, Idaho, etc... ) while maintaining national/global context. Heavy emphasis on Asian subsampling.
+- Root Selection:
+- Other adjustments:
+
+# 7. Adapting for Another State
+- Instructions on how to adapt this build for another state.
+
+# 8. Expected Outputs and Interpretation
+
+- `auspice/` folder contains:
+- `results/` folder contains:
