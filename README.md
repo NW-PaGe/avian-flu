@@ -64,6 +64,7 @@ When you run the build using `nextstrain build .`, Nextstrain uses Snakemake as 
 
 ## Repository File Structure Overview
 The file structure of the repository is as follows with bolded folders denoting folders that contain the expected outputs.
+
 .
 ├── README.md
 ├── Snakefile
