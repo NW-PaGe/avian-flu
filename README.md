@@ -25,7 +25,7 @@
 
 ## Getting Started
 (Describe any context that new users should know before using this project.)
-## Data Sources & Inputs
+### Data Sources & Inputs
 This build relies on publicly available data sourced from GISAID and GenBank. These data have been cleaned and stored on AWS.
 
 - **Sequence Data**: GISAID, GenBank (for select sequences)
@@ -34,8 +34,8 @@ This build relies on publicly available data sourced from GISAID and GenBank. Th
     - `new_data/raw_sequences_ha.fasta` (containing viral genome sequences)
     - `new_data/metadata.xlsx` (with relevant sample information)
 
-## Setup & Dependencies
-### Installation
+### Setup & Dependencies
+#### Installation
 Ensure that you have [Nextstrain](https://docs.nextstrain.org/en/latest/install.html) installed.
 
 To check that Nextstrain is installed:
@@ -43,7 +43,7 @@ To check that Nextstrain is installed:
 nextstrain check-setup
 ```
 
-### Clone the repository:
+#### Clone the repository:
 
 ```
 git clone https://github.com/NW-PaGe/avian-flu.git
