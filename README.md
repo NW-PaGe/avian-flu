@@ -9,7 +9,6 @@
 
 ## Table of Contents
 - [Getting Started](#getting-started)
-  - [High-level Build Features & Capabilities](#high-level-build-features--capabilities)
   - [Data Sources & Inputs](#data-sources--inputs)
   - [Setup & Dependencies](#setup--dependencies)
     - [Installation](#installation)
@@ -25,9 +24,8 @@
 
 ## Getting Started
 (Describe any context that new users should know before using this project.)
-
-### High-level Build Features & Capabilities
-- Washington focused subsampling strategy
+Some high-level build features and capabilities are:
+- Washington focused tiered subsampling strategy
 - Furin Cleavage Site Identification
 
 ### Data Sources & Inputs
@@ -74,17 +72,23 @@ After successfully running the build there will be two output folders containing
 - `clade-labeling`:
 
 ## Scientific Decisions
-- **Subsampling strategy**: [Prioritizes WA, regional (British Columbia, Idaho, etc... ) while maintaining national/global context. Heavy emphasis on Asia & North America subsampling. more here. What exactly is the subsampling strategy, why are we pulling from Asia more (because currently circulating D.1.1. clade most closely resembles an introduction from Asia)]}
-- **Root Selection**: A/Goose/Guangdong/1/96(H5N1) [Why was this root selected?]
-- **Furin Cleavage Site**:`scripts/annotate-ha-cleavage-site.py` is used by the rule cleavage_site to determine the sequence of amino acids at the HA cleavage site and annotate those sequences for whether they contain a furin cleavage site. This will show up on the Color By drop down as "furin cleavage motif" and be colored as present, absent, or missing data. [Why is it important that we know if there's a motif present or not and what does that tell us/how do we interpret it?]
-- **Molecular Clock IQD Range Increase**: [IQD range was increased from 4 to 10 to accommodate the D.1.1. sequences in Washington that were under diverged]
+- **Tiered subsampling**: [Prioritizes WA, regional (British Columbia, Idaho, etc... ) while maintaining national/global context. Heavy emphasis on Asia & North America subsampling. more here. What exactly is the subsampling strategy, why are we pulling from Asia more (because currently circulating D.1.1. clade most closely resembles an introduction from Asia)]}
+- **Root selection**: A/Goose/Guangdong/1/96(H5N1) [Why was this root selected?]
+- **Furin cleavage site**:`scripts/annotate-ha-cleavage-site.py` is used by the rule cleavage_site to determine the sequence of amino acids at the HA cleavage site and annotate those sequences for whether they contain a furin cleavage site. This will show up on the Color By drop down as "furin cleavage motif" and be colored as present, absent, or missing data. [Why is it important that we know if there's a motif present or not and what does that tell us/how do we interpret it?]
+- **Molecular clock IQD range**: [IQD range was increased from 4 to 10 to accommodate the D.1.1. sequences in Washington that were under diverged]
 - **Other adjustments**:
   - `config/includes.txt`: These sequences are always included into our sampling strategy as they are relevant to our epidemiological investigations.
   - `config/excludes.txt`: These sequences are always excluded from our subsampling and filtering due to duplication and based on epidemiological linkage knowledge.
 
 
 ## Adapting for Another State
-- [Instructions on how to adapt this build for another state. What files need to be modified and in what ways]
+ [Instructions on how to adapt this build for another state. What files need to be modified and in what ways. The sections should be outlined in a clear way]
+ - **Input files**: 
+ - **Tiered subsampling**:
+ - **Root selection**:
+ - **Molecular clock IQD range**:
+
+
 
 
 ## Contributing
