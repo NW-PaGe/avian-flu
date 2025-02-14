@@ -25,7 +25,8 @@
 
 ## Getting Started
 (Describe any context that new users should know before using this project.)
-###High-level Build Features & Capabilities
+
+### High-level Build Features & Capabilities
 - Washington focused subsampling strategy
 - Furin Cleavage Site Identification
 
