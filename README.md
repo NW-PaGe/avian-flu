@@ -83,7 +83,7 @@ After successfully running the build there will be two output folders containing
 
 ## Adapting for Another State
  [Instructions on how to adapt this build for another state. What files need to be modified and in what ways. The sections should be outlined in a clear way]
- - **Input files**: 
+ - **Input files**:
  - **Tiered subsampling**:
  - **Root selection**:
  - **Molecular clock IQD range**:
@@ -92,9 +92,11 @@ After successfully running the build there will be two output folders containing
 
 
 ## Contributing
-For any questions please submit them to our [Discussions](https://github.com/NW-PaGe/avian-flu/discussions) page otherwise software issues and requests can be logged as a [Git Issue]((https://github.com/NW-PaGe/avian-flu/issues)).
+For any questions please submit them to our [Discussions](https://github.com/NW-PaGe/avian-flu/discussions) page otherwise software issues and requests can be logged as a Git [Issue](https://github.com/NW-PaGe/avian-flu/issues).
 
 ## License
+This project is licensed under a modified GPL-3.0 License.
+You may use, modify, and distribute this work, but commercial use is strictly prohibited without prior written permission.
 
 ## Acknowledgements
 
