@@ -70,46 +70,18 @@ The file structure of the repository is as follows with `*`" folders denoting fo
 ├── README.md
 ├── Snakefile
 ├── auspice*
-│   └── flu_avian_h5n1_ha.json
 ├── clade-labeling
-│   └── h5n1-clades.tsv
 ├── config
-│   ├── auspice_config_h5n1.json
-│   ├── colors_h5n1_wa.tsv
-│   ├── exclude_isolates.txt
-│   ├── include_isolates.txt
-│   └── reference_h5n1_ha.gb
 ├── new_data
-│   ├── metadata.tsv
-│   ├── metadata.xlsx
-│   └── raw_sequences_ha.fasta
 ├── results*
-│   ├── aa-muts_h5n1_ha.json
-│   ├── aligned_h5n1_ha-delim.fasta.log
-│   ├── aligned_h5n1_ha-delim.iqtree.log
-│   ├── aligned_h5n1_ha.fasta
-│   ├── aligned_h5n1_ha.fasta.insertions.csv
-│   ├── aligned_h5n1_ha.fasta.log
-│   ├── branch-lengths_h5n1_ha.json
-│   ├── cleavage-site-sequences_h5n1_ha.json
-│   ├── cleavage-site_h5n1_ha.json
-│   ├── include
-│   ├── nt-muts_h5n1_ha.json
-│   ├── traits_h5n1_ha.json
-│   ├── traits_h5n1_hacountry.mugration_model.txt
-│   ├── traits_h5n1_haregion.mugration_model.txt
-│   ├── tree-raw_h5n1_ha.nwk
-│   └── tree_h5n1_ha.nwk
 └── scripts
-    ├── annotate-ha-cleavage-site.py
-    └── process_metadata.py
 ```
 
-
+- `Snakefile`: Snakefile description
 - `config/`: contains what
 - `new_data/`: contains What
-- `scripts/`:
-- `clade-labeling`:
+- `scripts/`: contains what
+- `clade-labeling`: contains what
 
 ## Expected Outputs and Interpretation
 After successfully running the build there will be two output folders containing the build results.
