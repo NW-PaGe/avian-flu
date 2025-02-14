@@ -54,16 +54,16 @@ cd avian-flu
 ```
 
 ## Run the Build with Test Data
-To test the pipeline with the provided example data make sure you are in the build folder `avian-flu/`:
+To test the pipeline with the provided example data located in `new_data/` make sure you are located in the build folder `avian-flu/` before running the build command:
 
 ```
 nextstrain build .
 ```
 
-When you run the build using `nextstrain build .`, Nextstrain uses Snakemake as the workflow manager to automate genomic analyses. The Snakefile in a Nextstrain build defines how raw input data (sequences and metadata) are processed step-by-step in an automated way. Nextstrain builds are powered by Augur (for phylogenetics) and Auspice (for visualization) and Snakemake is used to automate the execution of these steps based on file dependencies.
+When you run the build using `nextstrain build .`, Nextstrain uses Snakemake as the workflow manager to automate genomic analyses. The Snakefile in a Nextstrain build defines how raw input data (sequences and metadata) are processed step-by-step in an automated way. Nextstrain builds are powered by Augur (for phylogenetics) and Auspice (for visualization) and Snakemake is used to automate the execution of these steps using Augur and Auspice based on file dependencies.
 
 ## Repository File Structure Overview
-The file structure of the repository is as follows with `*`" folders denoting folders that contain the expected outputs.
+The file structure of the repository is as follows with `*`" folders denoting folders that are the build's expected outputs.
 
 ```
 .
@@ -105,8 +105,6 @@ After successfully running the build there will be two output folders containing
  - **Tiered subsampling**:
  - **Root selection**:
  - **Molecular clock IQD range**:
-
-
 
 
 ## Contributing
