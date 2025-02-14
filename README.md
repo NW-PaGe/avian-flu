@@ -1,4 +1,12 @@
 # H5N1 Washington focused build for HA segment
+
+## Build Overview
+- **Build Name**: H5N1 Washington focused build for HA segment
+- **Pathogen/Strain**: Influenza A H5N1
+- **Scope**: HA segment, Washington focused
+- **Purpose**: This repository contains the Nextstrain build for Washington State genomic surveillance of H5N1 HA segment.
+- **Nextstrain Build Location**: https://nextstrain.org/groups/wadoh/flu/avian/washington/h5n1/4y/ha
+
 ## Table of Contents
 - [Build Overview](#build-overview)
 - [Data Sources & Inputs](#data-sources--inputs)
@@ -11,16 +19,9 @@
 - [Adapting for Another State](#adapting-for-another-state)
 - [Expected Outputs and Interpretation](#expected-outputs-and-interpretation)
 - [Repository File Structure Overview](#repository-file-structure-overview)
-- [Questions](#questions)
+- [Contributing](#contributing)
+- [License](#license)
 - [Acknowledgements](#acknowledgements)
-
-
-## Build Overview
-- **Build Name**: H5N1 Washington focused build for HA segment
-- **Pathogen/Strain**: Influenza A H5N1
-- **Scope**: HA segment, Washington focused
-- **Purpose**: This repository contains the Nextstrain build for Washington State genomic surveillance of H5N1 HA segment.
-- **Nextstrain Build Location**: https://nextstrain.org/groups/wadoh/flu/avian/washington/h5n1/4y/ha
 
 ## Data Sources & Inputs
 This build relies on publicly available data sourced from GISAID and GenBank. These data have been cleaned and stored on AWS.
@@ -83,8 +84,10 @@ After successfully running the build there will be two output folders containing
 - `scripts/`:
 - `clade-labeling`:
 
-## Questions
+## Contributing
 For any questions please submit them to our [Discussions](https://github.com/NW-PaGe/avian-flu/discussions) page otherwise software issues and requests can be logged as a [Git Issue]((https://github.com/NW-PaGe/avian-flu/issues)).
+
+## License
 
 ## Acknowledgements
 
