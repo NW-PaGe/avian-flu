@@ -14,8 +14,8 @@
     - [Installation](#installation)
     - [Clone the repository](#clone-the-repository)
 - [Run the Build with Test Data](#run-the-build-with-test-data)
-- [Expected Outputs and Interpretation](#expected-outputs-and-interpretation)
 - [Repository File Structure Overview](#repository-file-structure-overview)
+- [Expected Outputs and Interpretation](#expected-outputs-and-interpretation)
 - [Scientific Decisions](#scientific-decisions)
 - [Adapting for Another State](#adapting-for-another-state)
 - [Contributing](#contributing)
@@ -54,22 +54,65 @@ cd avian-flu
 ```
 
 ## Run the Build with Test Data
-To test the pipeline with the provided example data:
+To test the pipeline with the provided example data make sure you are in the build folder `avian-flu/`:
 
 ```
 nextstrain build .
 ```
+
+When you run the build using `nextstrain build .`, Nextstrain uses Snakemake as the workflow manager to automate genomic analyses. The Snakefile in a Nextstrain build defines how raw input data (sequences and metadata) are processed step-by-step in an automated way. Nextstrain builds are powered by Augur (for phylogenetics) and Auspice (for visualization) and Snakemake is used to automate the execution of these steps based on file dependencies.
+
+## Repository File Structure Overview
+The file structure of the repository is as follows with bolded folders denoting folders that contain the expected outputs.
+.
+├── README.md
+├── Snakefile
+├── **auspice**
+│   └── flu_avian_h5n1_ha.json
+├── clade-labeling
+│   └── h5n1-clades.tsv
+├── config
+│   ├── auspice_config_h5n1.json
+│   ├── colors_h5n1_wa.tsv
+│   ├── exclude_isolates.txt
+│   ├── include_isolates.txt
+│   └── reference_h5n1_ha.gb
+├── new_data
+│   ├── metadata.tsv
+│   ├── metadata.xlsx
+│   └── raw_sequences_ha.fasta
+├── **results**
+│   ├── aa-muts_h5n1_ha.json
+│   ├── aligned_h5n1_ha-delim.fasta.log
+│   ├── aligned_h5n1_ha-delim.iqtree.log
+│   ├── aligned_h5n1_ha.fasta
+│   ├── aligned_h5n1_ha.fasta.insertions.csv
+│   ├── aligned_h5n1_ha.fasta.log
+│   ├── branch-lengths_h5n1_ha.json
+│   ├── cleavage-site-sequences_h5n1_ha.json
+│   ├── cleavage-site_h5n1_ha.json
+│   ├── include
+│   ├── nt-muts_h5n1_ha.json
+│   ├── traits_h5n1_ha.json
+│   ├── traits_h5n1_hacountry.mugration_model.txt
+│   ├── traits_h5n1_haregion.mugration_model.txt
+│   ├── tree-raw_h5n1_ha.nwk
+│   └── tree_h5n1_ha.nwk
+└── scripts
+    ├── annotate-ha-cleavage-site.py
+    └── process_metadata.py
+
+
+- `config/`: contains what
+- `new_data/`: contains What
+- `scripts/`:
+- `clade-labeling`:
+
 ## Expected Outputs and Interpretation
 After successfully running the build there will be two output folders containing the build results.
 
 - `auspice/` folder contains:
 - `results/` folder contains:
-
-## Repository File Structure Overview
-- `config/`: contains what
-- `new_data/`: contains What
-- `scripts/`:
-- `clade-labeling`:
 
 ## Scientific Decisions
 - **Tiered subsampling**: [Prioritizes WA, regional (British Columbia, Idaho, etc... ) while maintaining national/global context. Heavy emphasis on Asia & North America subsampling. more here. What exactly is the subsampling strategy, why are we pulling from Asia more (because currently circulating D.1.1. clade most closely resembles an introduction from Asia)]}
