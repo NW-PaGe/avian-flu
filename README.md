@@ -9,22 +9,26 @@
 
 ## Table of Contents
 - [Getting Started](#getting-started)
+  - [High-level Build Features & Capabilities](#high-level-build-features--capabilities)
   - [Data Sources & Inputs](#data-sources--inputs)
   - [Setup & Dependencies](#setup--dependencies)
     - [Installation](#installation)
     - [Clone the repository](#clone-the-repository)
 - [Run the Build with Test Data](#run-the-build-with-test-data)
-- [High-level Build Features & Capabilities](#high-level-build-features--capabilities)
-- [Scientific Decisions](#scientific-decisions)
-- [Adapting for Another State](#adapting-for-another-state)
 - [Expected Outputs and Interpretation](#expected-outputs-and-interpretation)
 - [Repository File Structure Overview](#repository-file-structure-overview)
+- [Scientific Decisions](#scientific-decisions)
+- [Adapting for Another State](#adapting-for-another-state)
 - [Contributing](#contributing)
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
 
 ## Getting Started
 (Describe any context that new users should know before using this project.)
+###High-level Build Features & Capabilities
+- Washington focused subsampling strategy
+- Furin Cleavage Site Identification
+
 ### Data Sources & Inputs
 This build relies on publicly available data sourced from GISAID and GenBank. These data have been cleaned and stored on AWS.
 
@@ -56,10 +60,17 @@ To test the pipeline with the provided example data:
 ```
 nextstrain build .
 ```
+## Expected Outputs and Interpretation
+After successfully running the build there will be two output folders containing the build results.
 
-## High-level Build Features & Capabilities
-- Washington focused subsampling strategy
-- Furin Cleavage Site Identification
+- `auspice/` folder contains:
+- `results/` folder contains:
+
+## Repository File Structure Overview
+- `config/`: contains what
+- `new_data/`: contains What
+- `scripts/`:
+- `clade-labeling`:
 
 ## Scientific Decisions
 - **Subsampling strategy**: [Prioritizes WA, regional (British Columbia, Idaho, etc... ) while maintaining national/global context. Heavy emphasis on Asia & North America subsampling. more here. What exactly is the subsampling strategy, why are we pulling from Asia more (because currently circulating D.1.1. clade most closely resembles an introduction from Asia)]}
@@ -74,17 +85,6 @@ nextstrain build .
 ## Adapting for Another State
 - [Instructions on how to adapt this build for another state. What files need to be modified and in what ways]
 
-## Expected Outputs and Interpretation
-After successfully running the build there will be two output folders containing the build results.
-
-- `auspice/` folder contains:
-- `results/` folder contains:
-
-## Repository File Structure Overview
-- `config/`: contains what
-- `new_data/`: contains What
-- `scripts/`:
-- `clade-labeling`:
 
 ## Contributing
 For any questions please submit them to our [Discussions](https://github.com/NW-PaGe/avian-flu/discussions) page otherwise software issues and requests can be logged as a [Git Issue]((https://github.com/NW-PaGe/avian-flu/issues)).
