@@ -63,24 +63,14 @@ nextstrain build .
 When you run the build using `nextstrain build .`, Nextstrain uses Snakemake as the workflow manager to automate genomic analyses. The Snakefile in a Nextstrain build defines how raw input data (sequences and metadata) are processed step-by-step in an automated way. Nextstrain builds are powered by Augur (for phylogenetics) and Auspice (for visualization) and Snakemake is used to automate the execution of these steps based on file dependencies.
 
 ## Repository File Structure Overview
-The file structure of the repository is as follows with bolded folders denoting folders that contain the expected outputs.
+The file structure of the repository is as follows with `*`" folders denoting folders that contain the expected outputs.
 
 ```
 .
 ├── README.md
 ├── Snakefile
-├── auspice
+├── auspice*
 │   └── flu_avian_h5n1_ha.json
-├── auspice_archive
-│   ├── flu_avian_h5n1_ha.json
-│   ├── flu_avian_h5n1_ha_12_03.json
-│   ├── flu_avian_h5n1_ha_2024.11.12_v2.json
-│   ├── flu_avian_h5n1_ha_correct_root.json
-│   ├── flu_avian_h5n1_ha_remove240.json
-│   ├── flu_avian_h5n1_ha_remove240_v2.json
-│   ├── flu_avian_h5n1_ha_root-sequence.json
-│   ├── flu_avian_h5n1_ha_subsample_N_America.json
-│   └── flu_avian_h5n1_ha_uploaded.json
 ├── clade-labeling
 │   └── h5n1-clades.tsv
 ├── config
@@ -93,7 +83,7 @@ The file structure of the repository is as follows with bolded folders denoting 
 │   ├── metadata.tsv
 │   ├── metadata.xlsx
 │   └── raw_sequences_ha.fasta
-├── results
+├── results*
 │   ├── aa-muts_h5n1_ha.json
 │   ├── aligned_h5n1_ha-delim.fasta.log
 │   ├── aligned_h5n1_ha-delim.iqtree.log
