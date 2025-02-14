@@ -8,7 +8,7 @@
 - **Nextstrain Build Location**: https://nextstrain.org/groups/wadoh/flu/avian/washington/h5n1/4y/ha
 
 ## Table of Contents
-- [Build Overview](#build-overview)
+- [Getting Started](#getting-started)
 - [Data Sources & Inputs](#data-sources--inputs)
 - [Setup & Dependencies](#setup--dependencies)
   - [Installation](#installation)
@@ -23,6 +23,8 @@
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
 
+## Getting Started
+(Describe any context that new users should know before using this project.)
 ## Data Sources & Inputs
 This build relies on publicly available data sourced from GISAID and GenBank. These data have been cleaned and stored on AWS.
 
