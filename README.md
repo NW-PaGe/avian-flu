@@ -78,15 +78,15 @@ The file structure of the repository is as follows with `*`" folders denoting fo
 ```
 
 - `Snakefile`: Snakefile description
-- `config/`: contains what
-- `new_data/`: contains What
-- `scripts/`: contains what
-- `clade-labeling`: contains what
+- `config/`: Contains the configuration .json file that defines how data should be presented in Auspice, the reference .gb file, the .tsv file to associate discrete values with colors in visualization, the include.txt and exluced.txt files to specify which sequences in include and exclude in build
+- `new_data/`: contains the most recent sequences and metadata to be used as input files
+- `scripts/`: contains python scripts that are called within the snakefile
+- `clade-labeling`: Currently not used in this build.
 
 ## Expected Outputs and Interpretation
 After successfully running the build there will be two output folders containing the build results.
 
-- `auspice/` folder contains:
+- `auspice/` folder contains: JSON file to be visualized in Auspice
 - `results/` folder contains:
 
 ## Scientific Decisions
