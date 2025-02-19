@@ -78,7 +78,7 @@ def min_date(w):
     date = {'h5nx':'1960','h5n1': '1996'}
     return date[w.subtype]
 
-"""h5nx sequences required to have a value for region in metadata; h5n1 sequences required to have value for region and county in metadata"
+"""h5nx sequences required to have a value for region in metadata; h5n1 sequences required to have value for region and county in metadata"""
 def traits_columns(w):
     traits = {'h5nx':'region','h5n1': 'region country'}
     return traits[w.subtype]
