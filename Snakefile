@@ -36,7 +36,7 @@ rule process_metadata:
         """
 
 """Specify all input files here. For this build, you'll start with input sequences
-from the example_data folder, which contain metadata information in the
+from the example_data folder, which contain partial metadata information in the
 sequence header. Specify here files denoting specific strains to include or drop,
 references sequences, and files for auspice visualization"""
 # Ensure all downstream rules reference the output of `process_metadata`
@@ -53,9 +53,9 @@ files = rules.files.params
 
 
 """These functions allow for different rules for different wildcards. For example,
-these groupby and sequences_per_group functions will result in h5nx viruses being
+these group_by and sequences_per_group functions will result in h5nx viruses being
 subsampled to 5 sequences per subtype, country,and year, while h5n1 gets will be
-subsampled down to 2 sequences per region, country, and month."""
+subsampled down to 10 sequences per region, country, and month."""
 
 def group_by(w):
     gb = {'h5nx': 'subtype country year','h5n1': 'region country month'}
@@ -78,6 +78,7 @@ def min_date(w):
     date = {'h5nx':'1960','h5n1': '1996'}
     return date[w.subtype]
 
+"""h5nx sequences required to have a value for region in metadata; h5n1 sequences required to have value for region and county in metadata"
 def traits_columns(w):
     traits = {'h5nx':'region','h5n1': 'region country'}
     return traits[w.subtype]
@@ -170,7 +171,7 @@ rule include_northamerica:
         sequences = files.input_sequences,
         metadata = files.input_metadata,
         specific_isolates = "config/include_isolates.txt",  # File containing isolate names to always include
-        exclude_isolates = "config/exclude_isolates.txt"
+        exclude_isolates = "config/exclude_isolates.txt"    #File containing isolate names to always exclude
     output:
         strains = "results/include/north-am-strains_{subtype}_{segment}.txt"
     params:
