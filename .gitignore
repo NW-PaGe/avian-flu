@@ -21,7 +21,7 @@ auspice_archive/
 files_for_auspice/
 raw_files_for_R/
 auspice/
-
+new_data/*
 # Sensitive environment variables
 environment*
 
