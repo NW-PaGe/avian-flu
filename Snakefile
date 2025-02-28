@@ -116,18 +116,12 @@ rule include_washington:
     output:
         strains = "results/include/washington-strains_{subtype}_{segment}.txt"
     params:
-        group_by = ['month','year'],
-        sequences_per_group = 400,
-        min_date = min_date,
-        min_length = min_length,
         query = "division == 'Washington'"
     shell:
         """
         augur filter \
          --metadata {input.metadata} \
          --sequences {input.sequences} \
-         --group-by {params.group_by} \
-         --sequences-per-group {params.sequences_per_group}  \
          --query {params.query:q} \
          --exclude {input.exclude_isolates} \
          --output-strains {output.strains}
