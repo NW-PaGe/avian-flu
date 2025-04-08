@@ -55,7 +55,9 @@ cd avian-flu
 ```
 
 ## Run the Build with Test Data
-To test the pipeline with the provided example data located in `new_data/` make sure you are located in the build folder `avian-flu/` before running the build command:
+To test the pipeline with the provided example data located in `test_data/`, you will need to copy over the contents of this folder, including the `metadata/` and `fasta/` subfolders, into the `new_data/` folder.  The Snakefile will pull ingest the contents of the `new_data/` folder into the build.  
+
+Make sure you are located in the build folder `avian-flu/` before running the build command:
 
 ```
 nextstrain build .
@@ -74,18 +76,20 @@ The file structure of the repository is as follows with `*`" folders denoting fo
 ├── clade-labeling
 ├── config
 ├── new_data
+├── test_data
 ├── results*
 └── scripts
 ```
 
 - `Snakefile`: This file specifies the entire avian-flu pipeline that will be run, with specific parameters for subsampling, tree building and visualization.
 - `config/`: Contains configuration files that specify default parameters such as which sequences to include and exclude in the build, the reference sequence, and which colors to visualize elements in the tree
-- `new_data/`: Contains the fasta and tsv file that will be ingested and run through the build.
+- `new_data/`: This folder is empty in the repo, but when running the build should contain a fasta and xlsx file that will be ingested and run through the build.
+- `test_data/`: Contains a fasta and metadata file from NCBI that can be ingested and run through this build when copied into `new_data/`.  It includes subfolders `metadata/` and `fasta /`.
 - `scripts/`: Contains pythons scripts that are called from the Snakefile during the build.
 - `clade-labeling`: Contains a tsv of the annotated clade for each H5N1 sequence that has been assigned using using a tool developed by using the [LABEL tool](https://wonder.cdc.gov/amd/flu/label/) **How will this be routinely updated?
 
 ## Expected Outputs and Interpretation
-After successfully running the build there will be two output folders containing the build results.
+Running the build with the provided fasta and metadata file in `test_data`, the runtime using a 32.0 GB computer with 4 cores should take approximately 10 minutes. After successfully running the build with test data, there will be two output folders containing the build results.
 
 - `auspice/` folder contains the JSON file to be visualized on [auspice.us](https://auspice.us/)
 - `results/` folder contains multiple intermediate files which include aligned sequences, subsampled sequences and phylogenetic trees in .nwk format
