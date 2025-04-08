@@ -89,7 +89,7 @@ The file structure of the repository is as follows with `*`" folders denoting fo
 - `clade-labeling`: Contains a tsv of the annotated clade for each H5N1 sequence that has been assigned using using a tool developed by using the [LABEL tool](https://wonder.cdc.gov/amd/flu/label/) **How will this be routinely updated?
 
 ## Expected Outputs and Interpretation
-After successfully running the build there will be two output folders containing the build results.
+Running the build with the provided fasta and metadata file in `test_data`, the runtime using a 32.0 GB computer with 4 cores should take approximately 10 minutes. After successfully running the build with test data, there will be two output folders containing the build results.
 
 - `auspice/` folder contains the JSON file to be visualized on [auspice.us](https://auspice.us/)
 - `results/` folder contains multiple intermediate files which include aligned sequences, subsampled sequences and phylogenetic trees in .nwk format
