@@ -34,8 +34,8 @@ This build relies on publicly available data sourced from GISAID and GenBank. Th
 - **Sequence Data**: GISAID, GenBank (for select sequences)
 - **Metadata**: Sample collection metadata from GISAID and GenBank
 - **Expected Inputs**:
-    - `new_data/raw_sequences_ha.fasta` (containing viral genome sequences)
-    - `new_data/metadata.xlsx` (with relevant sample information)
+    - `new_data/fasta/raw_sequences_ha.fasta` (containing viral genome sequences)
+    - `new_data/metadata/metadata.xlsx` (with relevant sample information)
 
 ### Setup & Dependencies
 #### Installation

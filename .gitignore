@@ -21,9 +21,10 @@ auspice_archive/
 files_for_auspice/
 raw_files_for_R/
 auspice/
-new_data/metadata.xls
-new_data/raw_sequences_ha.fasta
-new_data/metadata.tsv
+new_data/metadata/metadata.xls
+new_data/metadata/raw_sequences_ha.fasta
+new_data/metadata/metadata.tsv
+new_data/fasta/raw_sequences_ha.fasta
 
 # Sensitive environment variables
 environment*
