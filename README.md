@@ -23,6 +23,7 @@
 - [Acknowledgements](#acknowledgements)
 
 ## Getting Started
+This build was put together due to the need for a state focused H5N1 surveillance tool that was not previously available for Washington. The starting point for this build was the [Nextstrain H5N1 build](https://github.com/nextstrain/avian-flu) and Washington-specific subsampling and data sourcing were implemented.
 
 Some high-level build features and capabilities are:
 - **Washington focused tiered subsampling strategy**: This subsampling strategy prioritizes all Washington, Bitish Columbia, Idaho and Oregon sequences while maintaining a national and global context with subsampling from North America and global sequences.
@@ -45,6 +46,7 @@ To check that Nextstrain is installed:
 ```
 nextstrain check-setup
 ```
+If Nextstrain is not installed, follow [Nextstrian installation guidelines](https://docs.nextstrain.org/en/latest/install.html)
 
 #### Clone the repository:
 
@@ -54,13 +56,15 @@ cd avian-flu
 ```
 
 ## Run the Build with Test Data
-To test the pipeline with the provided example data located in `new_data/` make sure you are located in the build folder `avian-flu/` before running the build command:
+To test the pipeline with the provided example data located in `test_data/`, you will need to copy over the contents of this folder, including the `metadata/` and `fasta/` subfolders, into the `new_data/` folder.  The Snakefile will pull ingest the contents of the `new_data/` folder into the build.  
+
+Make sure you are located in the build folder `avian-flu/` before running the build command:
 
 ```
 nextstrain build .
 ```
 
-When you run the build using `nextstrain build .`, Nextstrain uses Snakemake as the workflow manager to automate genomic analyses. The Snakefile in a Nextstrain build defines how raw input data (sequences and metadata) are processed step-by-step in an automated way. Nextstrain builds are powered by Augur (for phylogenetics) and Auspice (for visualization) and Snakemake is used to automate the execution of these steps using Augur and Auspice based on file dependencies.
+When you run the build using `nextstrain build .` Nextstrain uses Snakemake as the workflow manager to automate genomic analyses. The Snakefile in a Nextstrain build defines how raw input data (sequences and metadata) are processed step-by-step in an automated way. Nextstrain builds are powered by Augur (for phylogenetics) and Auspice (for visualization) and Snakemake is used to automate the execution of these steps using Augur and Auspice based on file dependencies.
 
 ## Repository File Structure Overview
 The file structure of the repository is as follows with `*`" folders denoting folders that are the build's expected outputs.
@@ -78,6 +82,7 @@ The file structure of the repository is as follows with `*`" folders denoting fo
 └── scripts
 ```
 
+
 - `Snakefile`: The Snakefile serves as the blueprint for defining and organizing the data processing workflow. It is a plain text file that contains a series of rules, each specifying how to transform input files into output files.
 - `config/`: Contains the configuration .json file that defines how data should be presented in Auspice, the reference .gb file, the .tsv file to associate discrete values with colors in visualization, the include.txt and exluced.txt files to specify which sequences in include and exclude in build
 - `new_data/`: Contains the most recent sequences and metadata to be used as input files
@@ -87,8 +92,10 @@ The file structure of the repository is as follows with `*`" folders denoting fo
  - `process_metadata.py`: Python script that cleans and filters the metadata file.
 <!-- - - `clade-labeling`: Currently not used in this build. -->
 
+
 ## Expected Outputs and Interpretation
-After successfully running the build there will be two output folders containing the build results.
+Running the build with the provided fasta and metadata file in `test_data`, the runtime using a 32.0 GB computer with 4 cores should take approximately 10 minutes. After successfully running the build with test data, there will be two output folders containing the build results.
+
 
 - `auspice/` folder contains:
   - `flu_avian_h5n1_ha.json` : JSON file to be visualized in Auspice
@@ -98,9 +105,9 @@ After successfully running the build there will be two output folders containing
 
 ## Scientific Decisions
 - **Tiered subsampling**: Subsampling prioritizes Washington and regional (British Columbia, Idaho, Oregon) sequences while maintaining national/global with emphasis on North America and Asia. Subsampling focuses on Asia because of the currently circulating D.1.1. clade that most closely resembles an introduction from Asia.
-- Reference selection**: [A/Goose/Guangdong/1/96(H5N1)](https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=93838) is used as the reference because it was the first identified H5N1 subtype.
+- **Reference selection**: [A/Goose/Guangdong/1/96(H5N1)](https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=93838) is used as the reference because it was the first identified H5N1 subtype.
 - **Furin cleavage site**:`scripts/annotate-ha-cleavage-site.py` is used by the rule cleavage_site to determine the sequence of amino acids at the HA cleavage site and annotate those sequences for whether they contain a furin cleavage site. This will show up on the Color By drop down as "furin cleavage motif" and be colored as present, absent, or missing data. A furin cleavage motif addition preceding the HA cleavage site may result in viral replication across a range of tissues as well as being one of the prime determinants of avian influenza virulence.
-- **Molecular clock IQD range**: The IQD range was increased from 4 to 10 to accommodate the D.1.1. sequences in Washington that were under diverged. By increasing the IQD range, it allows tips that are more deviated than 10 interquartile ranges from the root-to-tip vs time regression to be included.
+- **Molecular clock IQD range**: IQD range was increased from 4 - based on the [Nextrain global H5N1 build](https://nextstrain.org/avian-flu/h5n1/ha/2y) - to 10 to accommodate the D.1.1. sequences in Washington that were under diverged.  In `augur refine`, the command `--clock-filter-iqd` removes tips that deviate more than *n* quartiles ranges from the root-to-tip vs time regression. By increasing the IQD from 4 to 10, less tips are filtered out and in turn the D.1.1 sequences will not be pruned from the tree.
 - **Other adjustments**:
   - `config/includes.txt`: These sequences are always included into our sampling strategy as they are relevant to our epidemiological investigations.
   - `config/excludes.txt`: These sequences are always excluded from our subsampling and filtering due to duplication and based on epidemiological linkage knowledge.
@@ -111,7 +118,8 @@ After successfully running the build there will be two output folders containing
  - **Tiered subsampling**: Tiered subsampling is a strategy that enables different numbers of sequences to be included in a Nextstrain build depending on what type of jurisdiction these sequences were sampled from , thereby allowing us to tailor sampling intensity to the jurisdiction(s) with the highest relevance for public health action, and minimize data inclusion from other areas. To adapt this subsampling to your own jurisdiction, the tiers of the sampling within the augur filter rules in the Snakefile (starting at line 107) need to be adjusted
  <!-- This feature is useful when many genome sequences for your pathogen of interest are available, and you need to constrain dataset size while prioritizing genomic surveillance visibility in your own jurisdiction, or your primary interest is in understanding transmission within a particular locality, but you wish to maintain background context of how that outbreak relates to broader scales of disease transmission. -->
  - **Reference selection**: The reference is [selected by the user](https://docs.nextstrain.org/en/latest/guides/bioinformatics/translate_ref.html) and is the sequence which all other samples in the tree are compared against for genome alignment and annotation.
- - **Molecular clock IQD range**: Selection of the IDQ range allows for flexibility in including or excluding more deviated sequences in the tree.  The decisions to increase or decrease IQD range parameter depends on what samples are to be included in the tree.
+<! -- - **Root selection**: The root of the tree determined the order of branching of a tree.  The root can be a reference sequence that represents the earliest known genome of a pathogen or be a fairly distant but related virus. -->
+ - **Molecular clock IQD range**: This range can be specified in the command `--clock-filter-iqd` within `augur refine`. Not including this command results in no sequences being pruned form the tree, and will include all outliers.  If wanting to prune outliers, the IQD value should prune the tree in a way that includes the sequences of interest but gets rid out unwanted outliers.
 
 
 ## Contributing

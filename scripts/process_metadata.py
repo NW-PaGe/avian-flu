@@ -43,6 +43,10 @@ def main():
     # Rename columns
     metadata.rename(columns={'Isolate_Name': 'strain', 'Collection_Date': 'date', 'Host': 'host'}, inplace=True)
 
+    # Ensure Collection_Date is treated as a string and format it as needed
+    metadata['date'] = metadata['date'].astype(str)  # Ensure it's a string
+    metadata['date'] = metadata['date'].apply(lambda x: x if 'XX' in x else pd.to_datetime(x, errors='coerce').strftime('%Y-%m-%d') if pd.to_datetime(x, errors='coerce') is not pd.NaT else 'NaT')
+
     # Subset to the required columns
     metadata_subset = metadata[['strain', 'virus', 'host', 'date', 'region', 'country', 'division', 'location']]
 

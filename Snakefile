@@ -15,7 +15,7 @@ SEGMENTS = ["ha"]
 generated JSON files in the auspice folder for each subtype and segment."""
 rule all:
     input:
-        processed_metadata = "new_data/metadata.tsv",
+        processed_metadata = "new_data/metadata/metadata.tsv",
         auspice_json = expand("auspice/flu_avian_{subtype}_{segment}.json", subtype=SUBTYPES, segment=SEGMENTS)
 
 # Add this new rule for processing metadata
@@ -25,9 +25,9 @@ rule process_metadata:
         Processing metadata from XLSX to TSV
         """
     input:
-        raw_metadata = "new_data/metadata.xlsx"
+        raw_metadata = "new_data/metadata/metadata.xlsx"
     output:
-        cleaned_metadata = "new_data/metadata.tsv"
+        cleaned_metadata = "new_data/metadata/metadata.tsv"
     shell:
         """
         python scripts/process_metadata.py \
@@ -42,7 +42,7 @@ references sequences, and files for auspice visualization"""
 # Ensure all downstream rules reference the output of `process_metadata`
 rule files:
     params:
-        input_sequences = "new_data/raw_sequences_ha.fasta",
+        input_sequences = "new_data/fasta/raw_sequences_ha.fasta",
         input_metadata = rules.process_metadata.output.cleaned_metadata,  # Update this line
         reference = "config/reference_h5n1_ha.gb",
         colors = "config/colors_h5n1_wa.tsv",
@@ -116,18 +116,12 @@ rule include_washington:
     output:
         strains = "results/include/washington-strains_{subtype}_{segment}.txt"
     params:
-        group_by = ['month','year'],
-        sequences_per_group = 400,
-        min_date = min_date,
-        min_length = min_length,
         query = "division == 'Washington'"
     shell:
         """
         augur filter \
          --metadata {input.metadata} \
          --sequences {input.sequences} \
-         --group-by {params.group_by} \
-         --sequences-per-group {params.sequences_per_group}  \
          --query {params.query:q} \
          --exclude {input.exclude_isolates} \
          --output-strains {output.strains}
