@@ -24,9 +24,10 @@
 
 ## Getting Started
 This build was put together due to the need for a state focused H5N1 surveillance tool that was not previously available for Washington. The starting point for this build was the [Nextstrain H5N1 build](https://github.com/nextstrain/avian-flu) and Washington-specific subsampling and data sourcing were implemented.
+
 Some high-level build features and capabilities are:
-- Washington focused tiered subsampling strategy
-- Furin Cleavage Site Identification
+- **Washington focused tiered subsampling strategy**: This subsampling strategy prioritizes all Washington, Bitish Columbia, Idaho and Oregon sequences while maintaining a national and global context with subsampling from North America and global sequences.
+- **Furin Cleavage Site Identification**: The Auspice color-by options includes two furin cleavage site labels: the furin cleavage site motifs are labeled as present, absent, or missing and the furin cleavage site sequences (the four bases preceding HA2) are labeled in the tree.
 
 ### Data Sources & Inputs
 This build relies on publicly available data sourced from GISAID and GenBank. These data have been cleaned and stored on AWS.
@@ -81,23 +82,31 @@ The file structure of the repository is as follows with `*`" folders denoting fo
 └── scripts
 ```
 
-- `Snakefile`: This file specifies the entire avian-flu pipeline that will be run, with specific parameters for subsampling, tree building and visualization.
-- `config/`: Contains configuration files that specify default parameters such as which sequences to include and exclude in the build, the reference sequence, and which colors to visualize elements in the tree
-- `new_data/`: This folder is empty in the repo, but when running the build should contain a fasta and xlsx file that will be ingested and run through the build.
-- `test_data/`: Contains a fasta and metadata file from NCBI that can be ingested and run through this build when copied into `new_data/`.  It includes subfolders `metadata/` and `fasta /`.
-- `scripts/`: Contains pythons scripts that are called from the Snakefile during the build.
-- `clade-labeling`: Contains a tsv of the annotated clade for each H5N1 sequence that has been assigned using using a tool developed by using the [LABEL tool](https://wonder.cdc.gov/amd/flu/label/) **How will this be routinely updated?
+
+- `Snakefile`: The Snakefile serves as the blueprint for defining and organizing the data processing workflow. It is a plain text file that contains a series of rules, each specifying how to transform input files into output files.
+- `config/`: Contains the configuration .json file that defines how data should be presented in Auspice, the reference .gb file, the .tsv file to associate discrete values with colors in visualization, the include.txt and exluced.txt files to specify which sequences in include and exclude in build
+- `new_data/`: Contains the most recent sequences and metadata to be used as input files
+- `test_data/`: Contains a the past 4 years of sequences and metadata sourced from NCBI to be used to test this build
+- `scripts/`: Contains scripts that are called within the Snakefile.
+ - `annotate-he-cleavage-site.py`: Python script that reads in HA alignment file, pulls out the 4 amino acid sites preceding HA2 and annotates the sequences for the furin cleavage site identification.
+ - `process_metadata.py`: Python script that cleans and filters the metadata file.
+<!-- - - `clade-labeling`: Currently not used in this build. -->
+
 
 ## Expected Outputs and Interpretation
 Running the build with the provided fasta and metadata file in `test_data`, the runtime using a 32.0 GB computer with 4 cores should take approximately 10 minutes. After successfully running the build with test data, there will be two output folders containing the build results.
 
-- `auspice/` folder contains the JSON file to be visualized on [auspice.us](https://auspice.us/)
-- `results/` folder contains multiple intermediate files which include aligned sequences, subsampled sequences and phylogenetic trees in .nwk format
+
+- `auspice/` folder contains:
+  - `flu_avian_h5n1_ha.json` : JSON file to be visualized in Auspice
+- `results/` folder contains:
+  - `include/`: Text files of subsampled sequences to include and a fasta file of sequences to include in build
+  - Intermediate files generated from build
 
 ## Scientific Decisions
-- **Tiered subsampling**: The subsampling scheme prioritizes Washington and regional (Oregon, Idaho, British Columbia and Alaska) sequences while maintaining national and global context. The contextual global subsampling includes a emphasis on North America to include national context as well as emphasis Asia because the currently circulating D.1.1. clade most closely resembles an introduction from Asia.
-- **Root selection**: A/Goose/Guangdong/1/96(H5N1) ; this root sequence is the same sequences as the reference sequences for this build. This virus is the precursor of currently circulating H5N1 viruses and was isolated from a farmed goose in 1996.
-- **Furin cleavage site**:`scripts/annotate-ha-cleavage-site.py` is used by the rule cleavage_site to determine the sequence of amino acids at the HA cleavage site and annotate those sequences for whether they contain a furin cleavage site. This will show up on the Color By drop down as "furin cleavage motif" and be colored as present, absent, or missing data. By understanding the furin cleavage motif, we are able to understand virulence.  Some viruses have additional basic residues preceding the HA cleavage site.  The addition of a furin cleavge motif may allow the HA to be cleaved by furin and in turn allow for viral replication across a range of tissue.  Sequences with this furin cleavage motif are indicated with `R-X-K/R-R` in the "furin cleavage motif" drop down representing the 4 bases preceding HA2 and `X` being any amino acid.
+- **Tiered subsampling**: Subsampling prioritizes Washington and regional (British Columbia, Idaho, Oregon) sequences while maintaining national/global with emphasis on North America and Asia. Subsampling focuses on Asia because of the currently circulating D.1.1. clade that most closely resembles an introduction from Asia.
+- **Reference selection**: [A/Goose/Guangdong/1/96(H5N1)](https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=93838) is used as the reference because it was the first identified H5N1 subtype.
+- **Furin cleavage site**:`scripts/annotate-ha-cleavage-site.py` is used by the rule cleavage_site to determine the sequence of amino acids at the HA cleavage site and annotate those sequences for whether they contain a furin cleavage site. This will show up on the Color By drop down as "furin cleavage motif" and be colored as present, absent, or missing data. A furin cleavage motif addition preceding the HA cleavage site may result in viral replication across a range of tissues as well as being one of the prime determinants of avian influenza virulence.
 - **Molecular clock IQD range**: IQD range was increased from 4 - based on the [Nextrain global H5N1 build](https://nextstrain.org/avian-flu/h5n1/ha/2y) - to 10 to accommodate the D.1.1. sequences in Washington that were under diverged.  In `augur refine`, the command `--clock-filter-iqd` removes tips that deviate more than *n* quartiles ranges from the root-to-tip vs time regression. By increasing the IQD from 4 to 10, less tips are filtered out and in turn the D.1.1 sequences will not be pruned from the tree.
 - **Other adjustments**:
   - `config/includes.txt`: These sequences are always included into our sampling strategy as they are relevant to our epidemiological investigations.
@@ -105,10 +114,11 @@ Running the build with the provided fasta and metadata file in `test_data`, the 
 
 
 ## Adapting for Another State
- If wanting to adapt this build to your state, the following files will need to be modified to fit your needs:[Instructions on how to adapt this build for another state. What files need to be modified and in what ways. The sections should be outlined in a clear way]
- - **Input files**:
- - **Tiered subsampling**:
- - **Root selection**: The root of the tree determined the order of branching of a tree.  The root can be a reference sequence that represents the earliest known genome of a pathogen or be a fairly distant but related virus.
+ - **Input files**: Raw fasta files and metadata files containing the starting sequences are ingested into build. The format for fasta file and metadata file should match that in the `test_data` folder.
+ - **Tiered subsampling**: Tiered subsampling is a strategy that enables different numbers of sequences to be included in a Nextstrain build depending on what type of jurisdiction these sequences were sampled from , thereby allowing us to tailor sampling intensity to the jurisdiction(s) with the highest relevance for public health action, and minimize data inclusion from other areas. To adapt this subsampling to your own jurisdiction, the tiers of the sampling within the augur filter rules in the Snakefile (starting at line 107) need to be adjusted
+ <!-- This feature is useful when many genome sequences for your pathogen of interest are available, and you need to constrain dataset size while prioritizing genomic surveillance visibility in your own jurisdiction, or your primary interest is in understanding transmission within a particular locality, but you wish to maintain background context of how that outbreak relates to broader scales of disease transmission. -->
+ - **Reference selection**: The reference is [selected by the user](https://docs.nextstrain.org/en/latest/guides/bioinformatics/translate_ref.html) and is the sequence which all other samples in the tree are compared against for genome alignment and annotation.
+<! -- - **Root selection**: The root of the tree determined the order of branching of a tree.  The root can be a reference sequence that represents the earliest known genome of a pathogen or be a fairly distant but related virus. -->
  - **Molecular clock IQD range**: This range can be specified in the command `--clock-filter-iqd` within `augur refine`. Not including this command results in no sequences being pruned form the tree, and will include all outliers.  If wanting to prune outliers, the IQD value should prune the tree in a way that includes the sequences of interest but gets rid out unwanted outliers.
 
 
@@ -121,4 +131,4 @@ You may use, modify, and distribute this work, but commercial use is strictly pr
 
 ## Acknowledgements
 
-[add acknowledgements to AMD teams, WADDL, etc... for contributing to this work]
+This work is made possible by the open sharing of genetic data by research groups from all over the world. We gratefully acknowledge their contributions.  Special thanks to Washington Animal Disease Diagnostic Laboratory (WADDL) and AMD collaborators.
