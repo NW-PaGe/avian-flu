@@ -11,6 +11,7 @@ add those to these lists, separated by commas"""
 SUBTYPES = ["h5n1"]
 SEGMENTS = ["ha"]
 
+
 """This rule tells Snakemake that at the end of the pipeline, you should have
 generated JSON files in the auspice folder for each subtype and segment."""
 rule all:
@@ -75,7 +76,7 @@ def min_length(w):
 
 """Sequences with sample collection dates earlier than these will be subsampled out of the build"""
 def min_date(w):
-    date = {'h5nx':'1960','h5n1': '1996'}
+    date = {'h5nx':'1960','h5n1': '2021'}
     return date[w.subtype]
 
 """h5nx sequences required to have a value for region in metadata; h5n1 sequences required to have value for region and county in metadata"""
@@ -116,7 +117,8 @@ rule include_washington:
     output:
         strains = "results/include/washington-strains_{subtype}_{segment}.txt"
     params:
-        query = "division == 'Washington'"
+        query = "division == 'Washington'",
+        min_date = min_date
     shell:
         """
         augur filter \
@@ -124,6 +126,7 @@ rule include_washington:
          --sequences {input.sequences} \
          --query {params.query:q} \
          --exclude {input.exclude_isolates} \
+         --min-date {params.min_date} \
          --output-strains {output.strains}
          """
 
@@ -153,6 +156,7 @@ rule include_regional:
          --sequences-per-group {params.sequences_per_group}  \
          --query {params.query:q} \
          --exclude {input.exclude_isolates} \
+         --min-date {params.min_date} \
          --output-strains {output.strains}
          """
 
@@ -170,7 +174,7 @@ rule include_northamerica:
         strains = "results/include/north-am-strains_{subtype}_{segment}.txt"
     params:
         group_by = ['month','year'],
-        sequences_per_group = 100,
+        sequences_per_group = 20,
         min_date = min_date,
         min_length = min_length,
         query = "(region == 'North America') & (division != 'Washington')"
@@ -184,6 +188,7 @@ rule include_northamerica:
          --query {params.query:q} \
          --include {input.specific_isolates} \
          --exclude {input.exclude_isolates} \
+         --min-date {params.min_date} \
          --output-strains {output.strains}
          """
 
