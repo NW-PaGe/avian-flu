@@ -3,3 +3,7 @@ A/Iowa/124/2024
 A/chicken/Washington/24-030039-001/2024
 A/chicken/Washington/24-030039-002/2024
 A/chicken/Washington/22-017871-001-original/2022
+
+#These two sequences have collection dates of 1923
+A/quail/Vietnam/NCVD-23AS358/2023
+A/poultry/Vietnam/NCVD-23AS454/2023

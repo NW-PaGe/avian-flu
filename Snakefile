@@ -76,7 +76,7 @@ def min_length(w):
 
 """Sequences with sample collection dates earlier than these will be subsampled out of the build"""
 def min_date(w):
-    date = {'h5nx':'1960','h5n1': '2021'}
+    date = {'h5nx':'1960','h5n1': '1996'}
     return date[w.subtype]
 
 """h5nx sequences required to have a value for region in metadata; h5n1 sequences required to have value for region and county in metadata"""
@@ -125,8 +125,8 @@ rule include_washington:
          --metadata {input.metadata} \
          --sequences {input.sequences} \
          --query {params.query:q} \
-         --exclude {input.exclude_isolates} \
          --min-date {params.min_date} \
+         --exclude {input.exclude_isolates} \
          --output-strains {output.strains}
          """
 
@@ -155,8 +155,9 @@ rule include_regional:
          --group-by {params.group_by} \
          --sequences-per-group {params.sequences_per_group}  \
          --query {params.query:q} \
-         --exclude {input.exclude_isolates} \
+         --min-length {params.min_length} \
          --min-date {params.min_date} \
+         --exclude {input.exclude_isolates} \
          --output-strains {output.strains}
          """
 
@@ -186,9 +187,10 @@ rule include_northamerica:
          --group-by {params.group_by} \
          --sequences-per-group {params.sequences_per_group}  \
          --query {params.query:q} \
+         --min-length {params.min_length} \
+         --min-date {params.min_date} \
          --include {input.specific_isolates} \
          --exclude {input.exclude_isolates} \
-         --min-date {params.min_date} \
          --output-strains {output.strains}
          """
 
@@ -205,8 +207,8 @@ rule include_world:
     params:
         group_by = ['month','year'],
         sequences_per_group = 2,
-        min_date = min_date,
         min_length = min_length,
+        min_date = min_date,
         query = "(region != 'North America' )"
     shell:
         """
@@ -216,6 +218,8 @@ rule include_world:
          --group-by {params.group_by} \
          --sequences-per-group {params.sequences_per_group}  \
          --query {params.query:q} \
+         --min-length {params.min_length} \
+         --min-date {params.min_date} \
          --output-strains {output.strains}
          """
 
@@ -232,8 +236,8 @@ rule include_asia:
     params:
         group_by = ['month','year'],
         sequences_per_group = 400,
-        min_date = min_date,
         min_length = min_length,
+        min_date = min_date,
         query = "(region == 'Asia' )"
     shell:
         """
@@ -242,6 +246,7 @@ rule include_asia:
          --sequences {input.sequences} \
          --group-by {params.group_by} \
          --sequences-per-group {params.sequences_per_group}  \
+         --min-date {params.min_date} \
          --query {params.query:q} \
          --output-strains {output.strains}
          """
@@ -328,7 +333,7 @@ rule refine:
         tree = "results/tree_{subtype}_{segment}.nwk",
         node_data = "results/branch-lengths_{subtype}_{segment}.json"
     params:
-        coalescent = "skyline",
+        coalescent = "opt",
         date_inference = "marginal",
         clock_filter_iqd = 10
     shell:
