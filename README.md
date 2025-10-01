@@ -17,7 +17,7 @@
     - [Clone the repository](#clone-the-repository)
 - [Run the Build with Test Data](#run-the-build-with-test-data)
 - [Repository File Structure Overview](#repository-file-structure-overview)
-- [Expected Outputs and Interpretation](#expected-outputs-and-interpretation)
+- [Expected Outputs](#expected-outputs)
 - [Customization for Local Adaptation](#customizations-for-local-adaptation)
 - [Contributing](#contributing)
 - [License](#license)
@@ -91,7 +91,7 @@ nextstrain build .
 
 When you run the build using `nextstrain build .` Nextstrain uses Snakemake as the workflow manager to automate genomic analyses. The Snakefile in a Nextstrain build defines how raw input data (sequences and metadata) are processed step-by-step in an automated way. Nextstrain builds are powered by Augur (for phylogenetics) and Auspice (for visualization) and Snakemake is used to automate the execution of these steps using Augur and Auspice based on file dependencies.
 
-## Repository File Structure Overview
+## Expected Outputs
 The file structure of the repository is as follows with `*`" folders denoting folders that are the build's expected outputs.
 
 ```
@@ -106,19 +106,9 @@ The file structure of the repository is as follows with `*`" folders denoting fo
 ├── results*
 └── scripts
 ```
+More details on file structure of this build can be found [here](https://github.com/NW-PaGe/avian-flu/wiki/File-Structure)
 
 
-- `Snakefile`: The Snakefile serves as the blueprint for defining and organizing the data processing workflow. It is a plain text file that contains a series of rules, each specifying how to transform input files into output files.
-- `config/`: Contains the configuration .json file that defines how data should be presented in Auspice, the reference .gb file, the .tsv file to associate discrete values with colors in visualization, the include.txt and exluced.txt files to specify which sequences in include and exclude in build
-- `new_data/`: Contains the most recent sequences and metadata to be used as input files
-- `test_data/`: Contains a the past 4 years of sequences and metadata sourced from NCBI to be used to test this build
-- `scripts/`: Contains scripts that are called within the Snakefile.
- - `annotate-he-cleavage-site.py`: Python script that reads in HA alignment file, pulls out the 4 amino acid sites preceding HA2 and annotates the sequences for the furin cleavage site identification.
- - `process_metadata.py`: Python script that cleans and filters the metadata file.
-<!-- - - `clade-labeling`: Currently not used in this build. -->
-
-
-## Expected Outputs and Interpretation
 Running the build with the provided fasta and metadata file in `test_data`, the runtime using a 32.0 GB computer with 4 cores should take approximately 10 minutes. After successfully running the build with test data, there will be two output folders containing the build results.
 
 
