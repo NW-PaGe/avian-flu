@@ -8,6 +8,8 @@
 - **Nextstrain Build Location**: https://nextstrain.org/groups/wadoh/flu/avian/washington/h5n1/4y/ha
 
 ## Table of Contents
+- [Pathogen Epidemiology](#pathogen-epidemiology)
+- [Scientific Decisions](#scientific-decisions)
 - [Getting Started](#getting-started)
   - [Data Sources & Inputs](#data-sources--inputs)
   - [Setup & Dependencies](#setup--dependencies)
@@ -16,11 +18,34 @@
 - [Run the Build with Test Data](#run-the-build-with-test-data)
 - [Repository File Structure Overview](#repository-file-structure-overview)
 - [Expected Outputs and Interpretation](#expected-outputs-and-interpretation)
-- [Scientific Decisions](#scientific-decisions)
-- [Adapting for Another State](#adapting-for-another-state)
+- [Customization for Local Adaptation](#customizations-for-local-adaptation)
 - [Contributing](#contributing)
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
+
+## Pathogen Epidemiology
+- **Overview**:
+  - H5N1 is a single stranded RNA virus with 8 segments. Due to this segments genome, novel genotypes can emerge from reassortment.
+  - Transmission mainly occurs through droplets from coughing, sneezing or other aerosolization.  
+- **Taxonomic Designations**:
+  - Subtypes classified based on hemagglutinin (HA) and neuraminidase  (NA) surface proteins. H5N1 is just one of 130 influenza A subtypes identified.
+  - Clades are classified based on the similarity of the HA segment
+  <!--  **Geographic Distribution and Seasonality**:-->
+- **Public Health Importance**: Surveillance of H5N1 in avian hosts and other animals allows early detection and public health risk assessment.
+  <!--  **Genomic Relevance**:-->
+- **Additional Resources**:
+  - [Highly Pathogenic Avian Influenza A Virus Clade 2.3.4.4b Infections in Wild Terrestrial Mammals, US, 2022](https://wwwnc.cdc.gov/eid/article/29/12/23-0464-f4)
+
+
+
+## Scientific Decisions
+- **Tiered subsampling**: Subsampling prioritizes Washington and regional (British Columbia, Idaho, Oregon) sequences while maintaining national/global with emphasis on North America and Asia. Subsampling focuses on Asia because of the currently circulating D.1.1. clade that most closely resembles an introduction from Asia.
+- **Reference selection**: [A/Goose/Guangdong/1/96(H5N1)](https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=93838) is used as the reference because it was the first identified H5N1 subtype.
+- **Furin cleavage site**:`scripts/annotate-ha-cleavage-site.py` is used by the rule cleavage_site to determine the sequence of amino acids at the HA cleavage site and annotate those sequences for whether they contain a furin cleavage site. This will show up on the Color By drop down as "furin cleavage motif" and be colored as present, absent, or missing data. A furin cleavage motif addition preceding the HA cleavage site may result in viral replication across a range of tissues as well as being one of the prime determinants of avian influenza virulence.
+- **Molecular clock IQD range**: IQD range was increased from 4 - based on the [Nextrain global H5N1 build](https://nextstrain.org/avian-flu/h5n1/ha/2y) - to 10 to accommodate the D.1.1. sequences in Washington that were under diverged.  In `augur refine`, the command `--clock-filter-iqd` removes tips that deviate more than *n* quartiles ranges from the root-to-tip vs time regression. By increasing the IQD from 4 to 10, less tips are filtered out and in turn the D.1.1 sequences will not be pruned from the tree.
+- **Other adjustments**:
+  - `config/includes.txt`: These sequences are always included into our sampling strategy as they are relevant to our epidemiological investigations.
+  - `config/excludes.txt`: These sequences are always excluded from our subsampling and filtering due to duplication and based on epidemiological linkage knowledge.
 
 ## Getting Started
 This build was put together due to the need for a state focused H5N1 surveillance tool that was not previously available for Washington. The starting point for this build was the [Nextstrain H5N1 build](https://github.com/nextstrain/avian-flu) and Washington-specific subsampling and data sourcing were implemented.
@@ -103,17 +128,10 @@ Running the build with the provided fasta and metadata file in `test_data`, the 
   - `include/`: Text files of subsampled sequences to include and a fasta file of sequences to include in build
   - Intermediate files generated from build
 
-## Scientific Decisions
-- **Tiered subsampling**: Subsampling prioritizes Washington and regional (British Columbia, Idaho, Oregon) sequences while maintaining national/global with emphasis on North America and Asia. Subsampling focuses on Asia because of the currently circulating D.1.1. clade that most closely resembles an introduction from Asia.
-- **Reference selection**: [A/Goose/Guangdong/1/96(H5N1)](https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=93838) is used as the reference because it was the first identified H5N1 subtype.
-- **Furin cleavage site**:`scripts/annotate-ha-cleavage-site.py` is used by the rule cleavage_site to determine the sequence of amino acids at the HA cleavage site and annotate those sequences for whether they contain a furin cleavage site. This will show up on the Color By drop down as "furin cleavage motif" and be colored as present, absent, or missing data. A furin cleavage motif addition preceding the HA cleavage site may result in viral replication across a range of tissues as well as being one of the prime determinants of avian influenza virulence.
-- **Molecular clock IQD range**: IQD range was increased from 4 - based on the [Nextrain global H5N1 build](https://nextstrain.org/avian-flu/h5n1/ha/2y) - to 10 to accommodate the D.1.1. sequences in Washington that were under diverged.  In `augur refine`, the command `--clock-filter-iqd` removes tips that deviate more than *n* quartiles ranges from the root-to-tip vs time regression. By increasing the IQD from 4 to 10, less tips are filtered out and in turn the D.1.1 sequences will not be pruned from the tree.
-- **Other adjustments**:
-  - `config/includes.txt`: These sequences are always included into our sampling strategy as they are relevant to our epidemiological investigations.
-  - `config/excludes.txt`: These sequences are always excluded from our subsampling and filtering due to duplication and based on epidemiological linkage knowledge.
 
 
-## Adapting for Another State
+
+## Customization for Local Adaptation
  - **Input files**: Raw fasta files and metadata files containing the starting sequences are ingested into build. The format for fasta file and metadata file should match that in the `test_data` folder.
  - **Tiered subsampling**: Tiered subsampling is a strategy that enables different numbers of sequences to be included in a Nextstrain build depending on what type of jurisdiction these sequences were sampled from , thereby allowing us to tailor sampling intensity to the jurisdiction(s) with the highest relevance for public health action, and minimize data inclusion from other areas. To adapt this subsampling to your own jurisdiction, the tiers of the sampling within the augur filter rules in the Snakefile (starting at line 107) need to be adjusted
  <!-- This feature is useful when many genome sequences for your pathogen of interest are available, and you need to constrain dataset size while prioritizing genomic surveillance visibility in your own jurisdiction, or your primary interest is in understanding transmission within a particular locality, but you wish to maintain background context of how that outbreak relates to broader scales of disease transmission. -->
