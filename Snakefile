@@ -201,7 +201,8 @@ rule include_world:
         """
     input:
         sequences = files.input_sequences,
-        metadata = files.input_metadata
+        metadata = files.input_metadata,
+        exclude_isolates = "config/exclude_isolates.txt"    #File containing isolate names to always exclude
     output:
         strains = "results/include/world-strains_{subtype}_{segment}.txt"
     params:
@@ -220,6 +221,7 @@ rule include_world:
          --query {params.query:q} \
          --min-length {params.min_length} \
          --min-date {params.min_date} \
+        --exclude {input.exclude_isolates} \
          --output-strains {output.strains}
          """
 
@@ -230,7 +232,8 @@ rule include_asia:
         """
     input:
         sequences = files.input_sequences,
-        metadata = files.input_metadata
+        metadata = files.input_metadata,
+        exclude_isolates = "config/exclude_isolates.txt"    #File containing isolate names to always exclude
     output:
         strains = "results/include/asia-strains_{subtype}_{segment}.txt"
     params:
@@ -247,6 +250,7 @@ rule include_asia:
          --group-by {params.group_by} \
          --sequences-per-group {params.sequences_per_group}  \
          --min-date {params.min_date} \
+         --exclude {input.exclude_isolates} \
          --query {params.query:q} \
          --output-strains {output.strains}
          """
