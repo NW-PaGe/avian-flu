@@ -238,7 +238,7 @@ rule include_asia:
         strains = "results/include/asia-strains_{subtype}_{segment}.txt"
     params:
         group_by = ['month','year'],
-        sequences_per_group = 400,
+        sequences_per_group = 2,
         min_length = min_length,
         min_date = min_date,
         query = "(region == 'Asia' )"
@@ -339,7 +339,7 @@ rule refine:
     params:
         coalescent = "opt",
         date_inference = "marginal",
-        clock_filter_iqd = 10
+        clock_filter_iqd = 5
     shell:
         """
         augur refine \
