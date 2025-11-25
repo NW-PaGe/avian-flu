@@ -50,15 +50,18 @@ env:
 phases:
   build:
     commands:
-      - echo "Downloading new GISAID data"
+
       -
       - echo "Starting ${BUILD_NAME} Nextstrain Build"
       - echo "Repository contents:"
       - pwd
       - ls -la
 
-      - echo "Submitting ${BUILD_NAME} build to AWS Batch..."
+      # Downloading h5n1 files
+      - echo "Downloading new H5N1 GISAID data"
       - aws s3 sync s3://wamep-flu-database/data/cleaned/merged/h5n1 new_data/
+
+      - echo "Submitting ${BUILD_NAME} build to AWS Batch..."
 
         # Run the build and capture output for Job ID extraction
         nextstrain build \
