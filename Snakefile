@@ -250,6 +250,7 @@ rule include_asia:
          --group-by {params.group_by} \
          --sequences-per-group {params.sequences_per_group}  \
          --min-date {params.min_date} \
+         --min-length {params.min_length} \
          --exclude {input.exclude_isolates} \
          --query {params.query:q} \
          --output-strains {output.strains}
@@ -339,7 +340,7 @@ rule refine:
     params:
         coalescent = "opt",
         date_inference = "marginal",
-        clock_filter_iqd = 5
+        clock_filter_iqd = 4
     shell:
         """
         augur refine \
