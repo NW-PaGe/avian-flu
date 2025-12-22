@@ -118,7 +118,7 @@ rule include_washington:
         strains = "results/include/washington-strains_{subtype}_{segment}.txt"
     params:
         query = "division == 'Washington'",
-        min_date = min_date
+        min_date = 2000
     shell:
         """
         augur filter \
@@ -144,7 +144,7 @@ rule include_regional:
     params:
         group_by = ['month','year', 'region'],
         sequences_per_group = 400,
-        min_date = min_date,
+        min_date = 2000,
         min_length = min_length,
         query = "division == ['Idaho','Oregon','British Columbia','Alaska']"
     shell:
@@ -176,7 +176,7 @@ rule include_northamerica:
     params:
         group_by = ['month','year'],
         sequences_per_group = 20,
-        min_date = min_date,
+        min_date = 2000,
         min_length = min_length,
         query = "(region == 'North America') & (division != 'Washington')"
     shell:
@@ -209,7 +209,7 @@ rule include_world:
         group_by = ['month','year'],
         sequences_per_group = 2,
         min_length = min_length,
-        min_date = min_date,
+        min_date = 2000,
         query = "(region != 'North America' )"
     shell:
         """
@@ -221,7 +221,7 @@ rule include_world:
          --query {params.query:q} \
          --min-length {params.min_length} \
          --min-date {params.min_date} \
-        --exclude {input.exclude_isolates} \
+         --exclude {input.exclude_isolates} \
          --output-strains {output.strains}
          """
 
@@ -240,7 +240,7 @@ rule include_asia:
         group_by = ['month','year'],
         sequences_per_group = 2,
         min_length = min_length,
-        min_date = min_date,
+        min_date = 2000,
         query = "(region == 'Asia' )"
     shell:
         """
