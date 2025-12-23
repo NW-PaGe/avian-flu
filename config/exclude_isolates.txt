@@ -16,3 +16,8 @@ A/whooperswan/Arkhangai/Ark1/2009
 A/duck/Vietnam/NCVD14-A484/2014
 A/duck/Vietnam/NCVD14-A449/2014
 A/chicken/Laos/201/2014
+
+#outgrouping entire build in a weird way
+
+A/mallardduck/Ohio/24OS0669/2024
+A/mallardduck/Ohio/24OS0668/2024
