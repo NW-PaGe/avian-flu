@@ -19,22 +19,6 @@ rule all:
         processed_metadata = "new_data/metadata/metadata.tsv",
         auspice_json = expand("auspice/flu_avian_{subtype}_{segment}.json", subtype=SUBTYPES, segment=SEGMENTS)
 
-# Add this new rule for processing metadata
-rule process_metadata:
-    message:
-        """
-        Processing metadata from XLSX to TSV
-        """
-    input:
-        raw_metadata = "new_data/metadata/metadata.xlsx"
-    output:
-        cleaned_metadata = "new_data/metadata/metadata.tsv"
-    shell:
-        """
-        python scripts/process_metadata.py \
-            --input {input.raw_metadata} \
-            --output {output.cleaned_metadata}
-        """
 
 """Specify all input files here. For this build, you'll start with input sequences
 from the example_data folder, which contain partial metadata information in the
@@ -44,11 +28,11 @@ references sequences, and files for auspice visualization"""
 rule files:
     params:
         input_sequences = "new_data/fasta/raw_sequences_ha.fasta",
-        input_metadata = rules.process_metadata.output.cleaned_metadata,  # Update this line
+        input_metadata = "new_data/metadata/metadata.xlsx",
+        nextclade = "new_data/metadata/nextclade_h5n1_ha.tsv",
         reference = "config/reference_h5n1_ha.gb",
         colors = "config/colors_h5n1_wa.tsv",
         auspice_config = "config/auspice_config_h5n1.json"
-
 
 files = rules.files.params
 
@@ -101,9 +85,62 @@ bash. Rules reference each other, so altering one rule may require changing anot
 if they depend on each other for inputs and outputs. Notes are included for
 specific rules."""
 
+rule process_metadata:
+    message:
+        """
+        Processing metadata from XLSX to TSV
+        """
+    input:
+        raw_metadata = files.input_metadata
+    output:
+        cleaned_metadata = "new_data/metadata/metadata.tsv"
+    shell:
+        """
+        python scripts/process_metadata.py \
+            --input {input.raw_metadata} \
+            --output {output.cleaned_metadata}
+        """
 
-"""This rule specifies how to subsample data for the build, which is highly
-customizable based on your desired tree."""
+rule merge_nextclade_to_metadata:
+    message:
+        """
+        Left joining nextclade output to wa_metadata file
+        """
+    input:
+        nextclade = files.nextclade,
+        metadata = "new_data/metadata/metadata.tsv"
+    output:
+        metadata = "new_data/metadata/metadata_with_clade.tsv"
+    run:
+        import pandas as pd
+        meta = pd.read_csv(input.metadata, sep="\t") #inputs metadata
+        nc   = pd.read_csv(input.nextclade, sep="\t")[["seqName", "clade"]] #subsets to two columns in file
+        nc   = nc.rename(columns={"seqName": "strain"}) #renames 'seqName' to 'strain'
+        merged = meta.merge(nc, on="strain", how="left") #joins dataframes on 'strain' column
+        merged.to_csv(output.metadata, sep="\t", index=False) #writes out files as tsv
+
+rule filter_2344b:
+    message:
+        """
+        Filtering to only include 2.3.4.4b sequences
+        """
+    input:
+        sequences = files.input_sequences,
+        metadata = "new_data/metadata/metadata_with_clade.tsv"
+    output:
+        sequences = "results/include/2.3.4.4b_strains_{subtype}_{segment}.fasta",
+        metadata = "results/include/2.3.4.4b_strains_{subtype}_{segment}.txt"
+    params:
+        clade = "2.3.4.4b"
+    shell:
+        """
+        augur filter \
+            --sequences {input.sequences} \
+            --metadata {input.metadata} \
+            --query "clade == '{params.clade}'" \
+            --output {output.sequences} \
+            --output-metadata {output.metadata}
+         """
 
 rule include_washington:
     message:
@@ -111,8 +148,8 @@ rule include_washington:
         Including all Washington sequences
         """
     input:
-        sequences = files.input_sequences,
-        metadata = files.input_metadata,
+        sequences = rules.filter_2344b.output.sequences,
+        metadata = rules.filter_2344b.output.metadata,
         exclude_isolates = "config/exclude_isolates.txt" # File containing isolate names to always exclude
     output:
         strains = "results/include/washington-strains_{subtype}_{segment}.txt"
@@ -136,8 +173,8 @@ rule include_regional:
         Including all regional sequences
         """
     input:
-        sequences = files.input_sequences,
-        metadata = files.input_metadata,
+        sequences = rules.filter_2344b.output.sequences,
+        metadata = rules.filter_2344b.output.metadata,
         exclude_isolates = "config/exclude_isolates.txt" # File containing isolate names to always exclude
     output:
         strains = "results/include/regional-strains_{subtype}_{segment}.txt"
@@ -167,8 +204,8 @@ rule include_northamerica:
         Subsampling for North America sequences to include
         """
     input:
-        sequences = files.input_sequences,
-        metadata = files.input_metadata,
+        sequences = rules.filter_2344b.output.sequences,
+        metadata = rules.filter_2344b.output.metadata,
         specific_isolates = "config/include_isolates.txt",  # File containing isolate names to always include
         exclude_isolates = "config/exclude_isolates.txt"    #File containing isolate names to always exclude
     output:
@@ -200,8 +237,8 @@ rule include_world:
         Subsampling for non North America sequences to include
         """
     input:
-        sequences = files.input_sequences,
-        metadata = files.input_metadata,
+        sequences = rules.filter_2344b.output.sequences,
+        metadata = rules.filter_2344b.output.metadata,
         exclude_isolates = "config/exclude_isolates.txt"    #File containing isolate names to always exclude
     output:
         strains = "results/include/world-strains_{subtype}_{segment}.txt"
@@ -231,8 +268,8 @@ rule include_asia:
         Subsampling for Asia sequences to include
         """
     input:
-        sequences = files.input_sequences,
-        metadata = files.input_metadata,
+        sequences = rules.filter_2344b.output.sequences,
+        metadata = rules.filter_2344b.output.metadata,
         exclude_isolates = "config/exclude_isolates.txt"    #File containing isolate names to always exclude
     output:
         strains = "results/include/asia-strains_{subtype}_{segment}.txt"
@@ -262,8 +299,8 @@ rule include:
         Combining all included strains for the pipeline
         """
     input:
-        sequences = files.input_sequences,
-        metadata = files.input_metadata,
+        sequences = rules.filter_2344b.output.sequences,
+        metadata = rules.filter_2344b.output.metadata,
         include = [
             rules.include_washington.output.strains,
             rules.include_regional.output.strains,
@@ -333,7 +370,7 @@ rule refine:
     input:
         tree = rules.tree.output.tree,
         alignment = rules.align.output,
-        metadata = files.input_metadata
+        metadata = rules.filter_2344b.output.metadata
     output:
         tree = "results/tree_{subtype}_{segment}.nwk",
         node_data = "results/branch-lengths_{subtype}_{segment}.json"
@@ -399,7 +436,7 @@ rule traits:
     message: "Inferring ancestral traits for {params.columns!s}"
     input:
         tree = rules.refine.output.tree,
-        metadata = files.input_metadata
+        metadata = rules.filter_2344b.output.metadata
     output:
         node_data = "results/traits_{subtype}_{segment}.json",
     params:
@@ -440,7 +477,7 @@ rule export:
     message: "Exporting data files for for auspice"
     input:
         tree = rules.refine.output.tree,
-        metadata = files.input_metadata,
+        metadata = rules.filter_2344b.output.metadata,
         node_data = node_data_by_wildcards,
         auspice_config = files.auspice_config
     output:

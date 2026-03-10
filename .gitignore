@@ -21,7 +21,9 @@ auspice_archive/
 files_for_auspice/
 raw_files_for_R/
 auspice/
-new_data/metadata/metadata.xls
+new_data/metadata/metadata.xlsx
+new_data/metadata/metadata_with_clade.tsv
+new_data/metadata/nextclade_h5n1_ha.tsv
 new_data/metadata/raw_sequences_ha.fasta
 new_data/metadata/metadata.tsv
 new_data/fasta/raw_sequences_ha.fasta
