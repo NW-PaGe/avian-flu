@@ -7,7 +7,7 @@
   "build_url": "https://github.com/NW-PaGe/avian-flu",
   "colorings": [
     {
-      "key": "clade",
+      "key": "Nextclade_Clade",
       "title": "Clade",
       "type": "categorical"
     },
