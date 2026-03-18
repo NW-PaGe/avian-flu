@@ -29,7 +29,6 @@ rule files:
     params:
         input_sequences = "new_data/fasta/raw_sequences_ha.fasta",
         input_metadata = "new_data/metadata/metadata.xlsx",
-        nextclade = "new_data/metadata/nextclade_h5n1_ha.tsv",
         reference = "config/reference_h5n1_ha.gb",
         colors = "config/colors_h5n1_wa.tsv",
         auspice_config = "config/auspice_config_h5n1.json"
@@ -101,24 +100,6 @@ rule process_metadata:
             --output {output.cleaned_metadata}
         """
 
-rule merge_nextclade_to_metadata:
-    message:
-        """
-        Left joining nextclade output to wa_metadata file
-        """
-    input:
-        nextclade = files.nextclade,
-        metadata = "new_data/metadata/metadata.tsv"
-    output:
-        metadata = "new_data/metadata/metadata_with_clade.tsv"
-    run:
-        import pandas as pd
-        meta = pd.read_csv(input.metadata, sep="\t") #inputs metadata
-        nc   = pd.read_csv(input.nextclade, sep="\t")[["seqName", "clade"]] #subsets to two columns in file
-        nc   = nc.rename(columns={"seqName": "strain"}) #renames 'seqName' to 'strain'
-        merged = meta.merge(nc, on="strain", how="left") #joins dataframes on 'strain' column
-        merged.to_csv(output.metadata, sep="\t", index=False) #writes out files as tsv
-
 rule filter_2344b:
     message:
         """
@@ -126,7 +107,7 @@ rule filter_2344b:
         """
     input:
         sequences = files.input_sequences,
-        metadata = "new_data/metadata/metadata_with_clade.tsv"
+        metadata = rules.process_metadata.output.cleaned_metadata
     output:
         sequences = "results/include/2.3.4.4b_strains_{subtype}_{segment}.fasta",
         metadata = "results/include/2.3.4.4b_strains_{subtype}_{segment}.txt"
@@ -137,7 +118,7 @@ rule filter_2344b:
         augur filter \
             --sequences {input.sequences} \
             --metadata {input.metadata} \
-            --query "clade == '{params.clade}'" \
+            --query "Nextclade_Clade == '{params.clade}'" \
             --output {output.sequences} \
             --output-metadata {output.metadata}
          """
