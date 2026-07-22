@@ -4,6 +4,11 @@
     {"name": "Lauren Frisbie", "url": "https://github.com/DOH-LAF2303/"},
     {"name": "Pauline Trinh", "url": "https://github.com/DOH-PNT0303/"}
   ],
+  "data_provenance": [
+    {
+      "name": "GISAID"
+    }
+  ],
   "build_url": "https://github.com/NW-PaGe/avian-flu",
   "colorings": [
     {
